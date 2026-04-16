@@ -1,4 +1,4 @@
-export const FeaturesSection = () => {
+export const CallAction = () => {
   const benefits = [
     {
       icon: "📑",

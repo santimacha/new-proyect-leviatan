@@ -1,5 +1,5 @@
 import { Document, Page, pdfjs } from "react-pdf"
-import { Enviroment } from "../../../../utils/env/enviroment"
+import { Enviroment } from "@/shared/utils/env/environment"
 import { useEffect, useState, useCallback } from "react"
 import { motion } from "motion/react"
 // @ts-ignore

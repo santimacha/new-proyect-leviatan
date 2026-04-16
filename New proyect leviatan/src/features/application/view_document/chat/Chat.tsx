@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
-import { Enviroment } from "../../../../utils/env/enviroment"
-import { useAuth } from "../../../../context/AuthContext"
+import { Enviroment } from "@/shared/utils/env/environment"
+import { useAuth } from "@/features/auth/context/AuthContext"
 
 
 interface Message {

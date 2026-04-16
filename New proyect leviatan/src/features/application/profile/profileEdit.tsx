@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Enviroment } from "../../../utils/env/enviroment";
+import { Enviroment } from "@/shared/utils/env/environment";
 
 interface UserData {
   id: number;

@@ -7,7 +7,7 @@ import { useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
 
 
-import { Chatbot } from "../chat/Chat"
+import { Chatbot } from "../../view_document/chat/Chat"
 import { Quiz } from "../Quiz"
 import { Enviroment } from "../../../../shared/utils/env/environment"
 import { useAuth } from "../../../auth/context/AuthContext"

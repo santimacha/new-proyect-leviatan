@@ -20,7 +20,7 @@ import Login from "@/features/auth/pages/Login";
 // FEATURES — APPLICATION
 import UploadDocument from "@/features/application/upload_document/Upload_Document";
 import { Statistics } from "@/features/application/statistics_user/statistics_user";
-import { ViewDocument } from "@/features/application/view_document/View_Document";
+import  {ViewDocument}  from "@/features/application/view_document/QUIZ/View_Document";
 import { ViewSubject } from "@/features/application/view_subject/View_Subject";
 import ProfileEdit from "@/features/application/profile/profileEdit";
 import ProfileChangePass from "@/features/application/profile/profileChangePass";

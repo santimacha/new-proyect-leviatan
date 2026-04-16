@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Enviroment } from "../../../utils/env/enviroment";
+import { Enviroment } from "@/shared/utils/env/environment";
 import { motion } from "framer-motion";
-import type { Subject } from "../../../utils/interfaces/subject.interface";
-import { useAuth } from "../../../context/AuthContext";
+import type { Subject } from "@/shared/interfaces/subject.interface";
+import { useAuth } from "@/features/auth/context/AuthContext";
 import { SubjectList } from "./components/Subject_List";
 import { SubjectModal } from "./components/Subject_Modal";
-import type { DocumentR } from "../../../utils/interfaces/document.interface";
+import type { DocumentR } from "@/shared/interfaces/document.interface";
 import { DocumentModal } from "./components/Document_Modal";
 import { useNavigate } from "react-router-dom";
 

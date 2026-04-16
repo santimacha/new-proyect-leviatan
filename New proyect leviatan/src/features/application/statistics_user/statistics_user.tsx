@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthContext";
-import { Enviroment } from "../../../utils/env/enviroment";
+import { useAuth } from "@/features/auth/context/AuthContext";
+import { Enviroment } from "@/shared/utils/env/environment";
 import { motion } from "framer-motion";
 import Chart from "react-apexcharts";
 import type { ApexOptions } from "apexcharts";

@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import type { FormEvent } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/features/auth/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
   PopupEmailPassword,
   PopupPasswordMismatch,
-} from "../../utils/pop_ups/error_Pops";
+} from "@/shared/components/popups/ErrorPop";
 import {
   PopupUserCreated,
   PopupLoginSuccess,
-} from "../../utils/pop_ups/confirm_Pops";
-import { Enviroment } from "../../shared/utils/env/environment";
+} from "@/shared/components/popups/ConfirmPop";
+import { Enviroment } from "@/shared/utils/env/environment";
 import type {
   LoginRequest,
   LoginResponse,
-} from "../../utils/interfaces/login.interface";
-import type { User } from "../../utils/interfaces/user.interface";
+} from "@/shared/interfaces/login.interface";
+import type { User } from "@/shared/interfaces/user.interface";
 import { motion } from "framer-motion";
 
 type Data = {

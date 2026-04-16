@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/features/auth/context/AuthContext";
 import { useEffect, useState } from "react";
-import { Enviroment } from "../../utils/env/enviroment";
+import { Enviroment } from "@/shared/utils/env/environment";
 
 interface UserData {
   id: number;
