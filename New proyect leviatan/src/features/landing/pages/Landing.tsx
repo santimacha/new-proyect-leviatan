@@ -17,5 +17,6 @@ export default function Landing() {
       <CallAction />
       <Footer isLanding />
     </div>
+    
   );
 }
