@@ -1,23 +1,12 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
-// AUTH CONTEXT
 import { AuthProvider } from "@/features/auth/context/AuthProvider";
-
-// ROUTES (app)
 import { ProtectedRoute } from "@/app/routes/ProtectedRoute";
 import { PublicRoute } from "@/app/routes/PublicRoute";
 import { RootRedirect } from "@/app/routes/RootRedirect";
-
-// SHARED
 import Layout from "@/shared/layout/Layout";
-
-// FEATURES — LANDING
 import Landing from "@/features/landing/pages/Landing";
-
-// FEATURES — AUTH
 import Login from "@/features/auth/pages/Login";
 
-// FEATURES — APPLICATION
 import UploadDocument from "@/features/application/upload_document/Upload_Document";
 import { Statistics } from "@/features/application/statistics_user/statistics_user";
 import  {ViewDocument}  from "@/features/application/view_document/QUIZ/View_Document";

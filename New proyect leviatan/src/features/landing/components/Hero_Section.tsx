@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./Button";
+import robotHero from "../../../assets/imagenes/imagen1.png"; 
 
 export const HeroSection = () => {
   const heroRef = useRef(null);
@@ -13,39 +14,51 @@ export const HeroSection = () => {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-50 to-purple-100"
+      className="relative min-h-screen w-full flex items-center justify-center bg-[#FDF9FF] overflow-hidden pt-28 pb-16"
     >
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center px-15">
-        <div className="space-y-8">
-          <h1 className="text-2xl lg:text-5xl font-bold leading-tight text-purple-700">
-            Tu Compañero de
-            <span className="block text-purple-500">Estudio IA Personal</span>
-          </h1>
+      <div className="max-w-[1440px] w-full mx-auto px-10 md:px-20 lg:px-28">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
+          
+          {/* --- COLUMNA IZQUIERDA: TEXTO --- */}
+          <div className="space-y-10 text-center md:text-left flex flex-col items-center md:items-start">
+            <h1 className="text-4xl lg:text-[56px] font-black leading-tight text-purple-700 tracking-tight max-w-[600px]">
+              Tu Compañero de
+              <span className="block text-purple-500">Estudio IA Personal</span>
+            </h1>
 
-          <p className="text-lg text-gray-700 leading-relaxed max-w-lg">
-            Transforma tus documentos en resúmenes interactivos, flashcards y
-            cuestionarios al instante. Estudia de forma inteligente, no más
-            dura.
-          </p>
+            <p className="text-xl text-gray-700 leading-relaxed font-normal max-w-[500px]">
+              Transforma tus documentos en resúmenes interactivos, 
+              flashcards y cuestionarios al instante. Estudia de forma 
+              inteligente, no más dura.
+            </p>
 
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Button
-              onClick={goToLogin}
-              size="lg"
-              className="bg-gradient-to-r from-purple-600 to-purple-400 hover:bg-purple-700 text-white px-1 py-1.5 text-lg rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
-            >
-              Comienza gratis
-            </Button>
+            <div className="w-full flex justify-center md:justify-start">
+              <Button
+                onClick={goToLogin}
+                size="lg"
+                className="bg-purple-600 hover:bg-purple-700 text-white 
+                           px-10 py-5 text-xl font-bold rounded-xl 
+                           shadow-2xl shadow-purple-500/10 
+                           transition-all duration-300 transform hover:scale-105 active:scale-95"
+              >
+                Comienza gratis
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="relative">
-          <div className="relative">
+          
+          {/* --- COLUMNA DERECHA: IMAGEN (ROBOT) --- */}
+          <div className="flex justify-center items-center bg-transparent"> 
+            {/* He eliminado el div absoluto de "luz de fondo" y el relative innecesario.
+               Si la imagen sigue teniendo el cuadro blanco, es probable que el archivo
+               imagen1.png no sea realmente transparente. 
+            */}
             <img
-              className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl shadow-2xl shadow-primary/20"
-              data-alt="Foto del estudiante usuario Alex Johnson"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC57eFi2BDNEUQQrM7QAOnFO07Iqbu518vHds8dsIw8yznS3CZdTqwa_btZeKLvrkMSughYRf15Arak8ovBOKtST6PKnBZGH0r8TILWmNcCX7OMhV6SKFN87xe3lYF9PNhGUq_Vg2O4RQAvrIx3eHEO0rNKzqep5G_5JbsfWRo-m5YJ12sFMjKNkXui7DwVO73i5oe1iHeY7f0G5PilMPkhFlzFfP7xGnTbgKhKNm-5XuNoMAAzVb2wMUf_AdsrJqtQAxGJbq-OOp2e"
+              className="w-full max-w-[500px] h-auto object-contain animate-float"
+              alt="Robot Asistente IA Personal"
+              src={robotHero}
             />
           </div>
+
         </div>
       </div>
     </section>
