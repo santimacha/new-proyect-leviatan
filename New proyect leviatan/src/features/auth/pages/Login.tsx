@@ -39,15 +39,10 @@ export default function Login() {
     confirmPassword: "",
   });
 
-  const [showEmailPasswordPopup, setShowEmailPasswordPopup] =
-    useState<boolean>(false);
-  const [showPasswordMismatchPopup, setShowPasswordMismatchPopup] =
-    useState<boolean>(false);
-
-  const [showUserCreatedPopup, setShowUserCreatedPopup] =
-    useState<boolean>(false);
-  const [showLoginSuccessPopup, setShowLoginSuccessPopup] =
-    useState<boolean>(false);
+  const [showEmailPasswordPopup, setShowEmailPasswordPopup] = useState(false);
+  const [showPasswordMismatchPopup, setShowPasswordMismatchPopup] = useState(false);
+  const [showUserCreatedPopup, setShowUserCreatedPopup] = useState(false);
+  const [showLoginSuccessPopup, setShowLoginSuccessPopup] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,31 +50,29 @@ export default function Login() {
   };
 
   const resetForm = () => {
-    setData({
-      name: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+    setData({ name: "", lastName: "", email: "", password: "", confirmPassword: "" });
   };
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+
     if (!data.email || !data.password) {
       setShowEmailPasswordPopup(true);
       setTimeout(() => setShowEmailPasswordPopup(false), 3000);
       return;
     }
+
     if (!isLogin && data.password !== data.confirmPassword) {
       setShowPasswordMismatchPopup(true);
       setTimeout(() => setShowPasswordMismatchPopup(false), 3000);
       return;
     }
+
     setLoading(true);
 
     try {
       if (!isLogin) {
+        // REGISTRO
         const registerData: User = {
           name: data.name!,
           lastName: data.lastName!,
@@ -94,15 +87,20 @@ export default function Login() {
           body: JSON.stringify(registerData),
         });
 
-        if (!registerRes.ok) throw new Error("Error en el registro");
+        if (!registerRes.ok) {
+          const err = await registerRes.json().catch(() => ({}));
+          throw new Error(err?.message ?? "Error en el registro");
+        }
+
+        const registerResult: LoginResponse = await registerRes.json();
+        login(registerResult); // el registro también devuelve accessToken
 
         setShowUserCreatedPopup(true);
         setTimeout(() => setShowUserCreatedPopup(false), 3000);
-        setTimeout(() => {
-          setIsLogin(true);
-          resetForm();
-        }, 3000);
+        setTimeout(() => navigate("/subject"), 3000);
+
       } else {
+        // LOGIN
         const loginData: LoginRequest = {
           email: data.email,
           password: data.password,
@@ -115,10 +113,21 @@ export default function Login() {
           body: JSON.stringify(loginData),
         });
 
-        const loginResult: LoginResponse = await loginRes.json();
-        if (!loginRes.ok) throw new Error("Credenciales incorrectas");
+        if (!loginRes.ok) {
+          const err = await loginRes.json().catch(() => ({}));
+          throw new Error(err?.message ?? "Credenciales incorrectas");
+        }
 
-        login(loginResult);
+        const loginResult = await loginRes.json();
+
+        // Si el usuario tiene 2FA activado el backend devuelve esto
+        if (loginResult.twoFactorRequired) {
+          throw new Error("Se requiere verificación de dos factores");
+        }
+
+        // Caso normal: el backend devuelve { accessToken }
+        const response: LoginResponse = { accessToken: loginResult.accessToken };
+        login(response);
 
         setShowLoginSuccessPopup(true);
         setTimeout(() => setShowLoginSuccessPopup(false), 5000);
@@ -144,30 +153,20 @@ export default function Login() {
         <div className="flex bg-violet-100 rounded-xl p-1 mb-6 shadow-inner">
           <button
             type="button"
-            onClick={() => {
-              resetForm();
-              setIsLogin(true);
-            }}
+            onClick={() => { resetForm(); setIsLogin(true); }}
             className={
               "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all " +
-              (isLogin
-                ? "bg-white text-violet-700 shadow-sm"
-                : "text-violet-600 hover:text-violet-700")
+              (isLogin ? "bg-white text-violet-700 shadow-sm" : "text-violet-600 hover:text-violet-700")
             }
           >
             Iniciar Sesión
           </button>
           <button
             type="button"
-            onClick={() => {
-              resetForm();
-              setIsLogin(false);
-            }}
+            onClick={() => { resetForm(); setIsLogin(false); }}
             className={
               "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all " +
-              (!isLogin
-                ? "bg-white text-violet-700 shadow-sm"
-                : "text-violet-600 hover:text-violet-700")
+              (!isLogin ? "bg-white text-violet-700 shadow-sm" : "text-violet-600 hover:text-violet-700")
             }
           >
             Registrarse
@@ -185,76 +184,26 @@ export default function Login() {
               {isLogin ? "Iniciar Sesión" : "Crear Cuenta"}
             </h2>
             <p className="text-gray-600 text-sm mb-6">
-              {isLogin
-                ? "Accede con tus credenciales"
-                : "Completa los datos para registrarte"}
+              {isLogin ? "Accede con tus credenciales" : "Completa los datos para registrarte"}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-              {/* Inputs dinámicos */}
               {!isLogin && (
                 <>
-                  <InputField
-                    label="Nombre completo"
-                    name="name"
-                    type="text"
-                    value={data.name}
-                    onChange={handleChange}
-                  />
-                  <InputField
-                    label="Apellido"
-                    name="lastName"
-                    type="text"
-                    value={data.lastName}
-                    onChange={handleChange}
-                  />
+                  <InputField label="Nombre completo" name="name" type="text" value={data.name} onChange={handleChange} />
+                  <InputField label="Apellido" name="lastName" type="text" value={data.lastName} onChange={handleChange} />
                 </>
               )}
-              <InputField
-                label="Correo electrónico"
-                name="email"
-                type="email"
-                value={data.email}
-                onChange={handleChange}
-              />
-              <InputField
-                label="Contraseña"
-                name="password"
-                type="password"
-                value={data.password}
-                onChange={handleChange}
-              />
+              <InputField label="Correo electrónico" name="email" type="email" value={data.email} onChange={handleChange} />
+              <InputField label="Contraseña" name="password" type="password" value={data.password} onChange={handleChange} />
               {!isLogin && (
-                <InputField
-                  label="Confirmar contraseña"
-                  name="confirmPassword"
-                  type="password"
-                  value={data.confirmPassword}
-                  onChange={handleChange}
-                />
+                <InputField label="Confirmar contraseña" name="confirmPassword" type="password" value={data.confirmPassword} onChange={handleChange} />
               )}
 
-              {/* POPUPS */}
-              {showEmailPasswordPopup && (
-                <PopupEmailPassword
-                  onClose={() => setShowEmailPasswordPopup(false)}
-                />
-              )}
-              {showPasswordMismatchPopup && (
-                <PopupPasswordMismatch
-                  onClose={() => setShowPasswordMismatchPopup(false)}
-                />
-              )}
-              {showUserCreatedPopup && (
-                <PopupUserCreated
-                  onClose={() => setShowUserCreatedPopup(false)}
-                />
-              )}
-              {showLoginSuccessPopup && (
-                <PopupLoginSuccess
-                  onClose={() => setShowLoginSuccessPopup(false)}
-                />
-              )}
+              {showEmailPasswordPopup && <PopupEmailPassword onClose={() => setShowEmailPasswordPopup(false)} />}
+              {showPasswordMismatchPopup && <PopupPasswordMismatch onClose={() => setShowPasswordMismatchPopup(false)} />}
+              {showUserCreatedPopup && <PopupUserCreated onClose={() => setShowUserCreatedPopup(false)} />}
+              {showLoginSuccessPopup && <PopupLoginSuccess onClose={() => setShowLoginSuccessPopup(false)} />}
 
               <motion.button
                 type="submit"
@@ -262,11 +211,7 @@ export default function Login() {
                 disabled={loading}
                 className="w-full bg-violet-700 hover:bg-violet-800 text-white font-medium py-2.5 px-4 mt-5 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 disabled:opacity-60"
               >
-                {loading
-                  ? "Procesando..."
-                  : isLogin
-                  ? "Iniciar Sesión"
-                  : "Crear Cuenta"}
+                {loading ? "Procesando..." : isLogin ? "Iniciar Sesión" : "Crear Cuenta"}
               </motion.button>
             </form>
           </div>
@@ -276,14 +221,7 @@ export default function Login() {
   );
 }
 
-/* 🔹 Componente de Input reutilizable con animación */
-function InputField({
-  label,
-  name,
-  type,
-  value,
-  onChange,
-}: {
+function InputField({ label, name, type, value, onChange }: {
   label: string;
   name: string;
   type: string;
@@ -297,9 +235,7 @@ function InputField({
       transition={{ duration: 0.4 }}
       className="space-y-2"
     >
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
-        {label}
-      </label>
+      <label htmlFor={name} className="block text-sm font-medium text-gray-700">{label}</label>
       <input
         id={name}
         name={name}

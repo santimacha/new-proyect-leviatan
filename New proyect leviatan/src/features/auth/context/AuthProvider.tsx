@@ -3,6 +3,16 @@ import { AuthContext } from "./AuthContext";
 import type { AuthUser } from "./AuthContext";
 import type { LoginResponse } from "@/shared/interfaces/login.interface";
 
+function decodeJwtPayload(token: string): { sub: number; role: string } | null {
+  try {
+    const base64Payload = token.split(".")[1];
+    const decoded = JSON.parse(atob(base64Payload));
+    return decoded;
+  } catch {
+    return null;
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(
     () => sessionStorage.getItem("access_token")
@@ -14,7 +24,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (data: LoginResponse) => {
     sessionStorage.setItem("access_token", data.accessToken);
-    const authUser: AuthUser = { user_id: data.user_id, email: data.email };
+
+    const payload = decodeJwtPayload(data.accessToken);
+    const authUser: AuthUser = {
+      user_id: payload?.sub ?? 0,
+      email: "",
+    };
+
     sessionStorage.setItem("auth_user", JSON.stringify(authUser));
     setToken(data.accessToken);
     setUser(authUser);
